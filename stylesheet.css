@@ -1,0 +1,28 @@
+.fix-height {
+    height: 100vh;
+}
+
+.black-square {
+    border: 1px solid black;
+    height: 4rem;
+    width: 4rem;
+    background-color: black;
+    font-size: 300%;
+    font-weight: bolder;
+    display: flex;
+    justify-content: center;
+    align-items: center
+}
+
+.white-square {
+    border: 1px solid black;
+    border-color: black;
+    width: 4rem;
+    height: 4rem;
+    background-color: white;
+    font-size: 300%;
+    font-weight: bolder;
+    display: flex;
+    justify-content: center;
+    align-items: center
+}
