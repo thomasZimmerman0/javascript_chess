@@ -106,14 +106,14 @@ for(let i = 0; i < positions.length; i++){
         let horizontal = positions[i].id[0]
         let vertical = positions[i].id[1]
         renderColor()
+        if(gameMap[horizontal][vertical].occupyingPiece !== null  && selectedPiece && gameMap[horizontal][vertical].occupyingPiece.JS.color == gameMap[selectedPiece[0]][selectedPiece[1]].occupyingPiece.JS.color){
+            selectedPiece = ""
+        }
 
         if(gameMap[horizontal][vertical].occupyingPiece !== null  && !selectedPiece){
-            console.log('first')
             for(position of positions){
                 position.classList.remove('potential-move')
             }
-            console.log(horizontal)
-            console.log(vertical)
             let possibleMoves = gameMap[horizontal][vertical].occupyingPiece.JS.getPossibleMoves(gameMap)
             for(move of possibleMoves){
                 document.getElementById(`${move}`).style.backgroundColor = 'yellow'

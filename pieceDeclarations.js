@@ -47,6 +47,9 @@ class Piece {
     }
 
     setNewPosition(gameMap, newPosition){
+        if(this.constructor.name == 'Pawn' && this.firstMove == true){
+            this.firstMove = false
+        }
         this.setHorizontalVertical()
         let HV = this.getHorizontalVerticalForPossible(newPosition)
         let holdPiece = gameMap[this.horizontal][this.vertical].occupyingPiece
