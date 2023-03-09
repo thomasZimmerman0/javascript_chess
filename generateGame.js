@@ -1,4 +1,7 @@
 let positions = document.getElementsByClassName('col-1')
+let game = new Game;
+let gameMap = game.gameMap;
+let selectedPiece = ""
 
 let generateGame = () => {
 
@@ -38,9 +41,6 @@ let generateGame = () => {
         wPawn8 = new Pawn('h2', 'white'),
     ]
 
-    let game = new Game;
-    let gameMap = game.gameMap;
-
     for(let i = 0; i < pieces.length; i++){
 
         let horizontal = pieces[i].position[0]
@@ -52,14 +52,7 @@ let generateGame = () => {
         }
     }
 
-    // console.log(wPawn2.getPossibleMoves(gameMap))
-    // console.log(wKnight2.getPossibleMoves(gameMap))
-    // console.log(bRook1.getPossibleMoves(gameMap))
-    // console.log(wQueen.getPossibleMoves(gameMap))
-    // console.log(wKing.getPossibleMoves(gameMap))
-    // console.log(wBishop1.getPossibleMoves(gameMap))
-
-    renderGame(gameMap)
+    renderGame()
    
 }
 
@@ -68,18 +61,18 @@ let renderColor = () => {
     let ctr = 0
     for(element of positions){
         if(white && ctr < 7){
-            document.getElementById(`${element.id}`).style.backgroundColor = 'black'
+            element.style.backgroundColor = 'black'
             white = false
             ctr++
         } else if(!white && ctr < 7) {
-            document.getElementById(`${element.id}`).style.backgroundColor = 'white'
+            element.style.backgroundColor = 'white'
             white = true
             ctr++
         } else if (white && ctr == 7){
-            document.getElementById(`${element.id}`).style.backgroundColor = 'black'
+            element.style.backgroundColor = 'black'
             ctr = 0
         } else if (!white && ctr == 7){
-            document.getElementById(`${element.id}`).style.backgroundColor = 'white'
+            element.style.backgroundColor = 'white'
             ctr = 0
         }
     }
@@ -87,47 +80,55 @@ let renderColor = () => {
 
 let reRenderGame = (gameMap) => {
     for(position of positions){
-        try{
-        position.removeEventListener('click', move)
-        position.removeEventListener('click', show)
-        } catch(err) {
-            console.log(err)
-        }
+        position.classList.remove('potential-move')
+        position.innerHTML = ""
     }
+    selectedPiece = ""
     renderGame(gameMap)
 }
 
-let renderGame = (gameMap) => {
+let renderGame = () => {
 
     renderColor()
-    let selectedPiece = {}
 
-    for(let i = 0; i < positions.length; i++){
-        console.log(positions.length)
-        let horizontal = positions[i].id[0]
-        let vertical = positions[i].id[1]
-
+    for(position of positions){
+        let horizontal = position.id[0]
+        let vertical = position.id[1]
         if(gameMap[horizontal][vertical].occupyingPiece !== null){
-            positions[i].innerHTML = gameMap[horizontal][vertical].occupyingPiece.HTML
-            positions[i].addEventListener('click', function show (e) {
-                this.removeEventListener('click', show)
-                selectedPiece = gameMap[horizontal][vertical].occupyingPiece.JS
-                renderColor()
-                let possibleMoves = gameMap[horizontal][vertical].occupyingPiece.JS.getPossibleMoves(gameMap)
-                console.log(possibleMoves)
-                for(let j = 0; j < possibleMoves.length; j++){
-                    document.getElementById(`${possibleMoves[j]}`).style.backgroundColor = 'yellow';
-                    document.getElementById(`${possibleMoves[j]}`).addEventListener('click', function move (e){
-                        let newGameMap = selectedPiece.setNewPosition(gameMap, e.target.id)
-                        reRenderGame(newGameMap)
-                    })
-                }
-            })
-        } else {
-            positions[i].innerHTML = '';
+            position.innerHTML = gameMap[horizontal][vertical].occupyingPiece.HTML
         }
     }
-    
+}
+
+for(let i = 0; i < positions.length; i++){
+
+    positions[i].addEventListener('click', (event)=>{
+        let horizontal = positions[i].id[0]
+        let vertical = positions[i].id[1]
+        renderColor()
+
+        if(gameMap[horizontal][vertical].occupyingPiece !== null  && !selectedPiece){
+            console.log('first')
+            for(position of positions){
+                position.classList.remove('potential-move')
+            }
+            console.log(horizontal)
+            console.log(vertical)
+            let possibleMoves = gameMap[horizontal][vertical].occupyingPiece.JS.getPossibleMoves(gameMap)
+            for(move of possibleMoves){
+                document.getElementById(`${move}`).style.backgroundColor = 'yellow'
+                document.getElementById(`${move}`).classList.add('potential-move')
+                selectedPiece = event.target.id
+            }
+        }
+            
+        if(event.target.classList.contains('potential-move')){
+            
+            let newGameMap = gameMap[selectedPiece[0]][selectedPiece[1]].occupyingPiece.JS.setNewPosition(gameMap, event.target.id)
+            
+            reRenderGame(newGameMap)
+        }
+    })
 }
 
 generateGame()
