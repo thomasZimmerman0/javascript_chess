@@ -107,7 +107,7 @@ class Piece {
         switch (this.constructor.name) {
             case 'Pawn':
                 moves.push(this.addPossibleMove(gameMap, 'captureLeftUp'))
-                moves.push(this.addPossibleMove(gameMap, 'caputreRightUp'))
+                moves.push(this.addPossibleMove(gameMap, 'captureRightUp'))
                 moves.push(this.addPossibleMove(gameMap, 'captureLeftDown'))
                 moves.push(this.addPossibleMove(gameMap, 'captureRightDown'))
                 moves.push(this.addPossibleMove(gameMap, 'advanceUp'))
@@ -150,7 +150,7 @@ class Piece {
                 moves = this.possibleMoveLoop(gameMap, 'leftDown', moves)
                 moves = this.possibleMoveLoop(gameMap, 'rightUp', moves)
                 moves = this.possibleMoveLoop(gameMap, 'rightDown', moves)
-                possibleMoves = this.buildPossibleMovesArray(possibleMoves)
+                possibleMoves = this.buildPossibleMovesArray(moves)
                 break;
             case 'King':
                 moves.push(this.addPossibleMove('up'))
@@ -161,7 +161,7 @@ class Piece {
                 moves.push(this.addPossibleMove('leftDown'))
                 moves.push(this.addPossibleMove('rightUp'))
                 moves.push(this.addPossibleMove('rightDown'))
-                possibleMoves = this.buildPossibleMovesArray(possibleMoves)
+                possibleMoves = this.buildPossibleMovesArray(moves)
                 break;
         }
 
@@ -212,7 +212,7 @@ class Bishop extends Piece {
     addPossibleMove(moveName, spaces){
         let checkMove = this.getNewPosition(this.bishopsMoves, moveName, spaces)
         let HV = this.getHorizontalVerticalForPossible(checkMove)
-        if (!tranLetterToNumber[HV.horizontal] || !tranNumberToLetter[HV.vertical]) {
+        if (!tranLetterToNumber[HV.horizontal] || !tranNumberToLetter[HV.vertical]){
             return null;
         }
         return checkMove;
@@ -262,8 +262,12 @@ class Pawn extends Piece {
             return null;
         }
         if (moveName == 'captureLeftUp' || moveName == 'captureRightUp') {
-            if (gameMap[HV.horizontal][HV.vertical].occupyingpiece != null && gameMap[HV.horizontal][HV.vertical].occupyingpiece[JS].color == 'black' && this.color == 'white' ) {
-                return checkMove
+            if (gameMap[HV.horizontal][HV.vertical].occupyingPiece != null){
+                if(gameMap[HV.horizontal][HV.vertical].occupyingPiece.JS.color == 'black'){
+                    return checkMove
+                } else {
+                    return null;
+                }
             } else {
                 return null;
             }
@@ -283,7 +287,7 @@ class Pawn extends Piece {
             }
         }
         if (moveName == 'captureLeftDown' || moveName == 'captureRightDown') {
-            if (gameMap[HV.horizontal][HV.vertical].occupyingpiece != null && gameMap[HV.horizontal][HV.vertical].occupyingpiece[JS].color == 'white' && this.color == 'black') {
+            if (gameMap[HV.horizontal][HV.vertical].occupyingPiece != null && gameMap[HV.horizontal][HV.vertical].occupyingPiece.JS.color == 'white' && this.color == 'black') {
                 return checkMove
             } else {
                 return null;
@@ -323,8 +327,10 @@ class Queen extends Piece {
         let checkMove = this.getNewPosition(this.queensMoves, moveName, spaces)
         let HV = this.getHorizontalVerticalForPossible(checkMove)
         if (!tranLetterToNumber[HV.horizontal] || !tranNumberToLetter[HV.vertical]) {
+            console.log('in return null')
             return null;
         }
+        console.log('returning-check-move')
         return checkMove
     }
 }
