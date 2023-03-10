@@ -37,6 +37,9 @@ class Piece {
         this.horizontal = parseInt(tranLetterToNumber[this.position[0]])
         this.vertical = parseInt(this.position[1])
         if (spaces == 0) {
+            console.log(moveSet)
+            console.log(moveType)
+            console.log(moveSet[moveType])
             this.horizontal += moveSet[moveType][1]
             this.vertical += moveSet[moveType][0]
         } else {
@@ -246,7 +249,7 @@ class Pawn extends Piece {
 
     pawnsMoves = {
         captureLeftUp: [1, -1],
-        caputreRightUp: [1, 1],
+        captureRightUp: [1, 1],
         captureLeftDown: [-1, -1],
         captureRightDown: [-1, 1],
         advanceUp: [1, 0],
@@ -262,7 +265,7 @@ class Pawn extends Piece {
             return null;
         }
         if (moveName == 'captureLeftUp' || moveName == 'captureRightUp') {
-            if (gameMap[HV.horizontal][HV.vertical].occupyingPiece != null){
+            if (gameMap[HV.horizontal][HV.vertical].occupyingPiece != null && gameMap[HV.horizontal][HV.vertical].occupyingPiece.JS.color == 'black' && this.color == 'white'){
                 if(gameMap[HV.horizontal][HV.vertical].occupyingPiece.JS.color == 'black'){
                     return checkMove
                 } else {
@@ -273,14 +276,14 @@ class Pawn extends Piece {
             }
         }
         if (moveName == 'advanceUp') {
-            if (gameMap[HV.horizontal][HV.vertical].occupyingpiece == null && this.color == 'white') {
+            if (gameMap[HV.horizontal][HV.vertical].occupyingPiece == null && this.color == 'white') {
                 return checkMove;
             } else {
                 return null;
             }
         }
         if (moveName == 'advanceUpTwo') {
-            if (gameMap[HV.horizontal][HV.vertical].occupyingpiece == null && this.color == 'white' && this.firstMove) {
+            if (gameMap[HV.horizontal][HV.vertical].occupyingPiece == null && this.color == 'white' && this.firstMove) {
                 return checkMove;
             } else {
                 return null;
@@ -294,14 +297,14 @@ class Pawn extends Piece {
             }
         }
         if (moveName == 'advanceDown') {
-            if (gameMap[HV.horizontal][HV.vertical].occupyingpiece == null &&  this.color == 'black') {
+            if (gameMap[HV.horizontal][HV.vertical].occupyingPiece == null &&  this.color == 'black') {
                 return checkMove;
             } else {
                 return null;
             }
         }
         if (moveName == 'advanceDownTwo') {
-            if (gameMap[HV.horizontal][HV.vertical].occupyingpiece == null && this.color == 'black' && this.firstMove) {
+            if (gameMap[HV.horizontal][HV.vertical].occupyingPiece == null && this.color == 'black' && this.firstMove) {
                 return checkMove;
             } else {
                 return null;
